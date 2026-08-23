@@ -46,8 +46,7 @@ function translateAuthError(code) {
 
 // Danh sách email được cấp quyền Admin
 const ADMIN_EMAILS = [
-    "admin@gmail.com",
-    "toannguyenquoc103@gmail.com"
+    "trungbell@gmail.com"
 ];
 
 export function isAdminUser(user) {
