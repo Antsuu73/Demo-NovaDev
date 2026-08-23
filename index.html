@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - NovaDev</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand brand" href="index.html">Nova<span>Dev</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto ms-lg-3">
+                <li class="nav-item"><a class="nav-link active" href="index.html" data-page="home">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="qa.html" data-page="qa">Hỏi đáp</a></li>
+                <li class="nav-item"><a class="nav-link" href="discussion.html" data-page="discussion">Thảo luận</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary btn-create d-none" id="btnCreatePost">+ Đăng bài</button>
+                <div id="authArea"><button class="btn btn-outline-primary btn-sm" id="btnLogin">Đăng nhập</button></div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1>Nơi chia sẻ và <span class="gradient-text">kết nối</span> cộng đồng</h1>
+                <p>Đặt câu hỏi, thảo luận và khám phá những bài viết nổi bật nhất từ cộng đồng NovaDev.</p>
+                <div class="hero-stats">
+                    <div><div class="num" id="statPosts">0</div><div class="label">Bài viết</div></div>
+                    <div><div class="num" id="statMembers">0</div><div class="label">Thành viên</div></div>
+                    <div><div class="num" id="statComments">0</div><div class="label">Bình luận</div></div>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-end">
+                <div class="hero-cards-preview">
+                    <div class="preview-card preview-card-1"><span class="preview-dot"></span>Hỏi đáp</div>
+                    <div class="preview-card preview-card-2"><span class="preview-dot"></span>Thảo luận</div>
+                    <div class="preview-card preview-card-3"><span class="preview-dot"></span>Nổi bật</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="container py-5">
+    <div class="home-layout">
+        <div class="home-main">
+            <section>
+                <h2 class="section-title">Bài viết nổi bật</h2>
+                <p class="section-sub">Những bài được quan tâm nhiều nhất — bấm vào để xem chi tiết</p>
+                <div class="featured-grid" id="featuredGrid"></div>
+                <div id="featuredEmpty" class="empty-state d-none">
+                    <div class="empty-icon">⭐</div>
+                    <h4>Chưa có bài viết nổi bật</h4>
+                    <p>Hãy khám phá trang <a href="qa.html">Hỏi đáp</a> hoặc <a href="discussion.html">Thảo luận</a>!</p>
+                </div>
+            </section>
+
+            <section class="quick-nav mt-5">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a href="qa.html" class="quick-nav-card qa-card">
+                            <div class="quick-nav-icon">💬</div>
+                            <div><h3>Hỏi đáp</h3><p>Đặt câu hỏi và nhận câu trả lời từ cộng đồng</p></div>
+                            <span class="quick-nav-arrow">→</span>
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="discussion.html" class="quick-nav-card discussion-card">
+                            <div class="quick-nav-icon">🔥</div>
+                            <div><h3>Thảo luận</h3><p>Chia sẻ ý kiến và thảo luận các chủ đề hot</p></div>
+                            <span class="quick-nav-arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <div id="pageLoading" class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 text-muted">Đang tải...</p>
+            </div>
+        </div>
+
+        <aside class="home-sidebar">
+            <div class="sidebar-card">
+                <h6>Điều hướng nhanh</h6>
+                <a href="qa.html" class="sidebar-link"><span class="icon">💬</span> Hỏi đáp</a>
+                <a href="discussion.html" class="sidebar-link"><span class="icon">🔥</span> Thảo luận</a>
+                <a href="profile.html" class="sidebar-link"><span class="icon">👤</span> Hồ sơ</a>
+            </div>
+            <div class="sidebar-card">
+                <h6>Chủ đề phổ biến</h6>
+                <span class="sidebar-tag">#javascript</span>
+                <span class="sidebar-tag">#react</span>
+                <span class="sidebar-tag">#python</span>
+                <span class="sidebar-tag">#firebase</span>
+                <span class="sidebar-tag">#css</span>
+                <span class="sidebar-tag">#nodejs</span>
+            </div>
+            <div class="sidebar-card">
+                <h6>Thống kê</h6>
+                <div class="sidebar-stats">
+                    <div class="sidebar-stat"><span class="stat-label">Bài viết</span><span class="stat-value" id="sideStatPosts">0</span></div>
+                    <div class="sidebar-stat"><span class="stat-label">Thành viên</span><span class="stat-value" id="sideStatMembers">0</span></div>
+                    <div class="sidebar-stat"><span class="stat-label">Bình luận</span><span class="stat-value" id="sideStatComments">0</span></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4"><h5>NovaDev</h5><p class="small">Diễn đàn cộng đồng nơi mọi người chia sẻ kiến thức và kết nối.</p></div>
+            <div class="col-md-4"><h5>Liên kết</h5><a href="index.html">Trang chủ</a><a href="qa.html">Hỏi đáp</a><a href="discussion.html">Thảo luận</a></div>
+            <div class="col-md-4"><h5>Theo dõi</h5><a href="#">Facebook</a><a href="#">Discord</a></div>
+        </div>
+        <hr class="border-secondary my-4">
+        <p class="text-center small mb-0">&copy; 2026 NovaDev. All rights reserved.</p>
+    </div>
+</footer>
+
+<div class="modal fade" id="authModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title" id="authModalTitle">Đăng nhập</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><button type="button" class="btn btn-google w-100 mb-4" id="btnGoogleLogin"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.56 2.95-2.24 5.45-4.78 7.12l7.73 6c4.51-4.18 7.09-10.36 7.09-17.59z"/><path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a23.88 23.88 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Đăng nhập bằng Google</button><div class="auth-divider mb-4"><span>hoặc</span></div><ul class="nav nav-pills nav-fill mb-4" id="authTabs"><li class="nav-item"><button class="nav-link active" data-tab="login">Đăng nhập</button></li><li class="nav-item"><button class="nav-link" data-tab="register">Đăng ký</button></li></ul><form id="loginForm"><div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="loginEmail" required></div><div class="mb-3"><label class="form-label">Mật khẩu</label><input type="password" class="form-control" id="loginPassword" required minlength="6"></div><button type="submit" class="btn btn-primary w-100">Đăng nhập</button></form><form id="registerForm" class="d-none"><div class="mb-3"><label class="form-label">Tên hiển thị</label><input type="text" class="form-control" id="registerName" required></div><div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="registerEmail" required></div><div class="mb-3"><label class="form-label">Mật khẩu</label><input type="password" class="form-control" id="registerPassword" required minlength="6"></div><button type="submit" class="btn btn-primary w-100">Đăng ký</button></form><div id="authError" class="alert alert-danger mt-3 d-none"></div></div></div></div></div>
+<div class="modal fade" id="createModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title" id="createModalTitle">Đăng bài viết mới</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="createForm"><input type="hidden" id="postType" value="discussion"><div class="mb-3"><label class="form-label">Tiêu đề</label><input type="text" class="form-control" id="postTitle" required maxlength="200"></div><div class="mb-3"><label class="form-label">Danh mục</label><select class="form-select" id="postCategory" required></select></div><div class="mb-3"><label class="form-label">Nội dung</label><textarea class="form-control" id="postContent" rows="8" required></textarea></div><button type="submit" class="btn btn-primary" id="createSubmitBtn">Đăng bài</button></form></div></div></div></div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="toast" class="toast" role="alert"><div class="toast-body d-flex align-items-center gap-2"><span id="toastMsg"></span></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="js/home.js"></script>
+</body>
+</html>

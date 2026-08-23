@@ -1,0 +1,217 @@
+/* Profile Page */
+.profile-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+}
+
+.profile-cover {
+    height: 120px;
+    background: linear-gradient(135deg, var(--primary) 0%, #2b6cb0 50%, var(--accent) 100%);
+    position: relative;
+}
+
+.profile-header-content {
+    padding: 0 2rem 1.5rem;
+    position: relative;
+}
+
+.profile-avatar-wrapper {
+    margin-top: -50px;
+    margin-bottom: 0.75rem;
+}
+
+.profile-avatar-lg {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    background: linear-gradient(135deg, var(--primary), #2b6cb0);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    font-weight: 700;
+    object-fit: cover;
+}
+
+.profile-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--primary);
+}
+
+.profile-bio {
+    color: #4a5568;
+    max-width: 650px;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.profile-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.profile-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+}
+
+.stat-card .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+.stat-card .stat-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.author-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+}
+
+.author-link:hover {
+    color: var(--accent);
+}
+
+/* Profile Tabs */
+#profileTabs .nav-link {
+    border-radius: 50px;
+    font-weight: 600;
+    color: #4a5568;
+    padding: 0.6rem 1.25rem;
+    transition: all 0.2s;
+}
+
+#profileTabs .nav-link.active {
+    background: var(--primary);
+    color: white;
+}
+
+#profileTabs .nav-link:hover:not(.active) {
+    background: var(--bg-warm);
+    color: var(--accent);
+}
+
+/* Edit profile button */
+#btnQuickEdit {
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+}
+
+/* Profile edit card */
+#paneEdit .card {
+    border-radius: 16px;
+}
+
+#paneEdit .form-label {
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 0.35rem;
+}
+
+#paneEdit .form-control {
+    border-radius: 12px;
+    border-color: var(--border);
+}
+
+#paneEdit .form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(192,86,33,0.15);
+}
+
+/* User posts list */
+.user-post-item {
+    background: white;
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    border: 1px solid var(--border);
+    transition: all 0.25s;
+    cursor: pointer;
+}
+
+.user-post-item:hover {
+    border-color: rgba(192,86,33,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.user-post-item .post-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.user-post-item .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Profile responsive */
+@media (max-width: 768px) {
+    .profile-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #profileTabs {
+        flex-direction: column;
+    }
+
+    #profileTabs .nav-link {
+        text-align: center;
+    }
+
+    .profile-header-content {
+        padding: 0 1.25rem 1.25rem;
+    }
+
+    .profile-name {
+        font-size: 1.35rem;
+    }
+}

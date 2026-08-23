@@ -1,0 +1,306 @@
+:root {
+    --primary: #1a365d;
+    --accent: #c05621;
+    --accent-light: #ed8936;
+    --bg-warm: #faf8f5;
+    --text-muted: #718096;
+    --border: #e2e8f0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-warm);
+    color: #2d3748;
+}
+
+h1, h2, h3, .brand {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+    padding: 0.75rem 0;
+}
+
+.brand {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary) !important;
+    text-decoration: none;
+}
+
+.brand span { color: var(--accent); }
+
+.nav-link {
+    font-weight: 500;
+    color: #4a5568 !important;
+    transition: color 0.2s;
+}
+
+.nav-link.active {
+    color: var(--accent) !important;
+    font-weight: 700;
+}
+
+.nav-link:hover { color: var(--accent) !important; }
+
+/* Buttons & Avatars */
+.btn-create {
+    background: var(--accent);
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 0.5rem 1.25rem;
+}
+
+.btn-create:hover {
+    background: var(--accent-light);
+}
+
+.btn-user {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 50px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1rem 0.35rem 0.35rem;
+    transition: all 0.2s;
+}
+
+.btn-user:hover {
+    background: var(--bg-warm);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.user-avatar, .post-avatar, .comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #2b6cb0);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.post-avatar-lg {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #2b6cb0);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.user-avatar-img,
+.post-avatar-img,
+.comment-avatar-img {
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.user-avatar-img { width: 32px; height: 32px; }
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+}
+
+.btn-primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.btn-outline-primary {
+    border-radius: 50px;
+    border-color: var(--primary);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: 50px;
+    font-weight: 600;
+    color: #4a5568;
+    padding: 0.65rem 1.25rem;
+    transition: all 0.2s;
+}
+
+.btn-google:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+    color: #2d3748;
+}
+
+/* Auth modal */
+#authTabs .nav-link {
+    border-radius: 50px;
+    color: #4a5568 !important;
+    font-weight: 600;
+}
+
+#authTabs .nav-link.active {
+    background: var(--primary);
+    color: white !important;
+}
+
+.modal-content {
+    border-radius: 20px;
+    border: none;
+}
+
+.modal-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* Footer */
+footer {
+    background: var(--primary);
+    color: rgba(255,255,255,0.8);
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+}
+
+footer h5 {
+    color: white;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 1rem;
+}
+
+footer a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+}
+
+footer a:hover { color: var(--accent-light); }
+
+.toast-container { z-index: 9999; }
+
+/* User menu & dropdown */
+.user-menu {
+    position: relative;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    border: 1px solid var(--border);
+    min-width: 200px;
+    padding: 0.5rem 0;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s;
+}
+
+.user-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 1.25rem;
+    color: #2d3748;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.15s;
+}
+
+.user-dropdown a:hover {
+    background: var(--bg-warm);
+    color: var(--accent);
+}
+
+.user-dropdown .dropdown-divider {
+    margin: 0.5rem 0;
+    border-color: var(--border);
+}
+
+.user-dropdown .dropdown-item-danger {
+    color: #e53e3e;
+}
+
+.user-dropdown .dropdown-item-danger:hover {
+    background: #fff5f5;
+    color: #c53030;
+}
+
+/* Form controls */
+.form-control, .form-select {
+    border-radius: 12px;
+    border-color: var(--border);
+    padding: 0.65rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(192,86,33,0.15);
+}
+
+/* Links */
+.content a, .card a, .post-detail a, .list-card a, .featured-card a, .quick-nav-card a, .sidebar-link a {
+    color: var(--accent);
+}
+
+.content a:hover, .card a:hover, .post-detail a:hover, .list-card a:hover, .featured-card a:hover, .quick-nav-card a:hover, .sidebar-link a:hover {
+    color: var(--accent-light);
+}

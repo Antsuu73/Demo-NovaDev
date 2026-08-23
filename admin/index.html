@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị hệ thống - NovaDev Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+<!-- Access Denied Screen (Shown by default for unauthorized access) -->
+<div id="adminAccessDenied" class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden" style="max-width: 480px; width: 100%;">
+        <div class="card-header bg-danger text-white text-center py-4 border-0">
+            <h4 class="fw-bold m-0">Quyền truy cập bị từ chối</h4>
+            <p class="small text-white-50 m-0 mt-1">Trang này dành riêng cho Quản trị viên (Admin)</p>
+        </div>
+        <div class="card-body p-4">
+            <div id="adminDeniedMessage" class="alert alert-warning text-center mb-4">
+                Bạn cần đăng nhập tài khoản có quyền Admin để truy cập hệ thống này.
+            </div>
+            
+            <form id="adminLoginForm">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email Admin</label>
+                    <input type="email" class="form-control" id="adminLoginEmail" placeholder="admin@novadev.com" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Mật khẩu</label>
+                    <input type="password" class="form-control" id="adminLoginPassword" required minlength="6">
+                </div>
+                <div id="adminLoginError" class="alert alert-danger small d-none mb-3"></div>
+                <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-semibold">Đăng nhập Admin</button>
+            </form>
+            
+            <div class="text-center mt-3">
+                <a href="../index.html" class="btn btn-link text-decoration-none text-muted">Quay về trang chủ Website</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Main Wrapper (Hidden until authenticated) -->
+<div class="admin-wrapper d-none" id="adminWrapper">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-brand">
+            <a href="index.html" class="brand">Nova<span>Dev</span> <span class="badge bg-danger fs-6 ms-1">Admin</span></a>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item-btn active" data-tab="overview">
+                Tổng quan
+            </button>
+            <button class="nav-item-btn" data-tab="posts">
+                Quản lý Bài viết
+            </button>
+            <button class="nav-item-btn" data-tab="users">
+                Quản lý Thành viên
+            </button>
+            <button class="nav-item-btn" data-tab="create">
+                Đăng bài mới
+            </button>
+            <hr class="border-secondary my-3">
+            <a href="../index.html" class="nav-item-btn text-decoration-none">
+                Về Trang chủ
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div id="adminUserArea" class="small text-muted">Đang tải tài khoản...</div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Topbar -->
+        <header class="admin-topbar d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-outline-secondary d-md-none" id="btnToggleSidebar">Menu</button>
+                <h4 class="m-0 fw-bold" id="pageTitle">Tổng quan hệ thống</h4>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3" id="btnAdminLogout">Đăng xuất Admin</button>
+                <a href="../index.html" class="btn btn-outline-primary btn-sm rounded-pill px-3">Về Website</a>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <section class="row g-3 mb-4">
+            <div class="col-6 col-lg-3">
+                <div class="admin-stat-card">
+                    <div class="stat-icon bg-primary-subtle text-primary">BV</div>
+                    <div>
+                        <div class="stat-num" id="adminStatPosts">0</div>
+                        <div class="stat-title">Tổng bài viết</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="admin-stat-card">
+                    <div class="stat-icon bg-warning-subtle text-warning">HD</div>
+                    <div>
+                        <div class="stat-num" id="adminStatQA">0</div>
+                        <div class="stat-title">Câu hỏi QA</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="admin-stat-card">
+                    <div class="stat-icon bg-info-subtle text-info">TL</div>
+                    <div>
+                        <div class="stat-num" id="adminStatDiscussion">0</div>
+                        <div class="stat-title">Bài thảo luận</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="admin-stat-card">
+                    <div class="stat-icon bg-success-subtle text-success">TV</div>
+                    <div>
+                        <div class="stat-num" id="adminStatUsers">0</div>
+                        <div class="stat-title">Thành viên</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content Panes -->
+        <!-- Pane: Overview -->
+        <section id="paneOverview" class="tab-pane-content">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="admin-card">
+                        <div class="admin-card-header d-flex justify-content-between align-items-center">
+                            <h5 class="m-0">Bài viết mới nhất</h5>
+                            <button class="btn btn-sm btn-link text-decoration-none" id="btnViewAllPosts">Xem tất cả</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle table-hover m-0">
+                                <thead>
+                                    <tr>
+                                        <th>Tiêu đề</th>
+                                        <th>Loại</th>
+                                        <th>Tác giả</th>
+                                        <th>Lượt thích</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overviewPostsTable">
+                                    <tr><td colspan="5" class="text-center py-3 text-muted">Đang tải bài viết...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="admin-card">
+                        <div class="admin-card-header">
+                            <h5 class="m-0">Thành viên mới</h5>
+                        </div>
+                        <div class="list-group list-group-flush" id="overviewUsersList">
+                            <div class="p-3 text-center text-muted">Đang tải thành viên...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pane: Posts Management -->
+        <section id="panePosts" class="tab-pane-content d-none">
+            <div class="admin-card">
+                <div class="admin-card-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <h5 class="m-0">Danh sách bài viết</h5>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <input type="search" class="form-control form-control-sm search-input" id="postSearchInput" placeholder="Tìm tiêu đề / tác giả...">
+                        <select class="form-select form-select-sm sort-select" id="postFilterType">
+                            <option value="all">Tất cả loại</option>
+                            <option value="qa">Hỏi đáp</option>
+                            <option value="discussion">Thảo luận</option>
+                        </select>
+                        <select class="form-select form-select-sm sort-select" id="postFilterCategory">
+                            <option value="all">Tất cả danh mục</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover m-0">
+                        <thead>
+                            <tr>
+                                <th>Tiêu đề</th>
+                                <th>Loại</th>
+                                <th>Danh mục</th>
+                                <th>Tác giả</th>
+                                <th>Xem / Thích / Cmt</th>
+                                <th>Ngày tạo</th>
+                                <th class="text-end">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminPostsTable">
+                            <tr><td colspan="7" class="text-center py-4 text-muted">Đang tải dữ liệu bài viết...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pane: Users Management -->
+        <section id="paneUsers" class="tab-pane-content d-none">
+            <!-- Users List Card -->
+            <div class="admin-card">
+                <div class="admin-card-header d-flex justify-content-between align-items-center">
+                    <h5 class="m-0">Danh sách thành viên</h5>
+                    <input type="search" class="form-control form-control-sm search-input" id="userSearchInput" placeholder="Tìm tên / email...">
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover m-0">
+                        <thead>
+                            <tr>
+                                <th>Thành viên</th>
+                                <th>Email</th>
+                                <th>Đăng nhập bằng</th>
+                                <th>Ngày tham gia</th>
+                                <th class="text-end">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminUsersTable">
+                            <tr><td colspan="5" class="text-center py-4 text-muted">Đang tải danh sách thành viên...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pane: Create New Post -->
+        <section id="paneCreate" class="tab-pane-content d-none">
+            <div class="admin-card" style="max-width: 800px;">
+                <div class="admin-card-header">
+                    <h5 class="m-0">Đăng bài viết mới từ Admin</h5>
+                </div>
+                <div class="p-4">
+                    <form id="adminCreatePostForm">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label font-weight-bold">Loại bài viết</label>
+                                <select class="form-select" id="adminPostType" required>
+                                    <option value="discussion">Thảo luận</option>
+                                    <option value="qa">Hỏi đáp</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label font-weight-bold">Danh mục</label>
+                                <select class="form-select" id="adminPostCategory" required></select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Tiêu đề bài viết</label>
+                            <input type="text" class="form-control" id="adminPostTitle" placeholder="Nhập tiêu đề..." required maxlength="200">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Nội dung chi tiết</label>
+                            <textarea class="form-control" id="adminPostContent" rows="8" placeholder="Soạn thảo nội dung..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary px-4 rounded-pill">Đăng bài viết</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Edit Post Modal -->
+<div class="modal fade" id="adminEditModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">Chỉnh sửa bài viết (Admin)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="adminEditForm">
+                    <input type="hidden" id="adminEditId">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Loại bài viết</label>
+                            <select class="form-select" id="adminEditType" required>
+                                <option value="discussion">Thảo luận</option>
+                                <option value="qa">Hỏi đáp</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Danh mục</label>
+                            <select class="form-select" id="adminEditCategory" required></select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tiêu đề</label>
+                        <input type="text" class="form-control" id="adminEditTitle" required maxlength="200">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nội dung</label>
+                        <textarea class="form-control" id="adminEditContent" rows="8" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary rounded-pill">Lưu cập nhật</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast" role="alert">
+        <div class="toast-body d-flex align-items-center gap-2">
+            <span id="toastMsg"></span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="admin.js"></script>
+</body>
+</html>

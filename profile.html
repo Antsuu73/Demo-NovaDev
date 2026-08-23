@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân - NovaDev</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="profile">
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand brand" href="index.html">Nova<span>Dev</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto ms-lg-3">
+                <li class="nav-item"><a class="nav-link" href="index.html" data-page="home">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="qa.html" data-page="qa">Hỏi đáp</a></li>
+                <li class="nav-item"><a class="nav-link" href="discussion.html" data-page="discussion">Thảo luận</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary btn-create d-none" id="btnCreatePost">+ Đăng bài</button>
+                <div id="authArea"><button class="btn btn-outline-primary btn-sm" id="btnLogin">Đăng nhập</button></div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <!-- Profile Card Header -->
+    <div class="profile-card">
+        <div class="profile-cover"></div>
+        <div class="profile-header-content">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div class="profile-avatar-wrapper" id="profileAvatarContainer">
+                    <span class="profile-avatar-lg">?</span>
+                </div>
+                <button class="btn btn-outline-primary btn-sm rounded-pill px-3 mt-3 d-none" id="btnQuickEdit">Chỉnh sửa hồ sơ</button>
+            </div>
+            <div>
+                <h1 class="profile-name" id="profileName">Đang tải...</h1>
+                <p class="profile-bio" id="profileBio">Chưa có thông tin giới thiệu.</p>
+            </div>
+            
+            <hr class="my-3 border-secondary-subtle">
+            
+            <div class="profile-meta" id="profileMeta">
+                <span id="profileEmail">Email: ...</span>
+                <span id="profileJoined">Tham gia: ...</span>
+                <span id="profileProvider">Đăng nhập: ...</span>
+                <span id="profileGithub" class="d-none"><a href="#" target="_blank" id="githubLink" class="text-decoration-none">GitHub</a></span>
+                <span id="profileWebsite" class="d-none"><a href="#" target="_blank" id="websiteLink" class="text-decoration-none">Website</a></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="profile-stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="userStatPosts">0</div>
+            <div class="stat-label">Bài viết đã đăng</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="userStatComments">0</div>
+            <div class="stat-label">Bình luận</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="userStatLikes">0</div>
+            <div class="stat-label">Lượt thích nhận được</div>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-pills nav-fill mb-4 p-1 bg-white rounded-3 border shadow-sm" id="profileTabs">
+        <li class="nav-item">
+            <button class="nav-link active" data-tab="posts">📝 Bài viết đã đăng</button>
+        </li>
+        <li class="nav-item" id="tabItemEdit">
+            <button class="nav-link" data-tab="edit">⚙️ Chỉnh sửa thông tin</button>
+        </li>
+    </ul>
+
+    <!-- Tab Contents -->
+    <div id="panePosts">
+        <div id="userPostsList"></div>
+        <div id="userPostsEmpty" class="empty-state d-none">
+            <div class="empty-icon">📝</div>
+            <h4>Chưa có bài viết nào</h4>
+            <p>Người dùng này chưa tạo bài viết hoặc câu hỏi nào.</p>
+        </div>
+    </div>
+
+    <div id="paneEdit" class="d-none">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                <h4 class="mb-3">Cập nhật thông tin cá nhân</h4>
+                <form id="editProfileForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label font-weight-bold">Tên hiển thị</label>
+                            <input type="text" class="form-control" id="editDisplayName" required maxlength="50">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">URL Ảnh đại diện (Avatar)</label>
+                            <input type="url" class="form-control" id="editPhotoURL" placeholder="https://example.com/avatar.jpg">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Tiểu sử / Giới thiệu ngắn (Bio)</label>
+                            <textarea class="form-control" id="editBio" rows="3" placeholder="Chia sẻ một chút về bản thân, công nghệ bạn yêu thích..." maxlength="300"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Đường dẫn GitHub</label>
+                            <input type="url" class="form-control" id="editGithub" placeholder="https://github.com/username">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Trang web cá nhân</label>
+                            <input type="url" class="form-control" id="editWebsite" placeholder="https://yourwebsite.com">
+                        </div>
+                        <div class="col-12 text-end mt-4">
+                            <button type="submit" class="btn btn-primary px-4 rounded-pill" id="btnSaveProfile">💾 Lưu thay đổi</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="pageLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Đang tải thông tin hồ sơ...</p>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4"><h5>NovaDev</h5><p class="small">Diễn đàn cộng đồng nơi mọi người chia sẻ kiến thức và kết nối.</p></div>
+            <div class="col-md-4"><h5>Liên kết</h5><a href="index.html">Trang chủ</a><a href="qa.html">Hỏi đáp</a><a href="discussion.html">Thảo luận</a></div>
+            <div class="col-md-4"><h5>Theo dõi</h5><a href="#">Facebook</a><a href="#">Discord</a></div>
+        </div>
+        <hr class="border-secondary my-4">
+        <p class="text-center small mb-0">&copy; 2026 NovaDev. All rights reserved.</p>
+    </div>
+</footer>
+
+<div class="modal fade" id="authModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title" id="authModalTitle">Đăng nhập</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><button type="button" class="btn btn-google w-100 mb-4" id="btnGoogleLogin"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.56 2.95-2.24 5.45-4.78 7.12l7.73 6c4.51-4.18 7.09-10.36 7.09-17.59z"/><path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a23.88 23.88 0 0 0 0 21.56l7.98-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Đăng nhập bằng Google</button><div class="auth-divider mb-4"><span>hoặc</span></div><ul class="nav nav-pills nav-fill mb-4" id="authTabs"><li class="nav-item"><button class="nav-link active" data-tab="login">Đăng nhập</button></li><li class="nav-item"><button class="nav-link" data-tab="register">Đăng ký</button></li></ul><form id="loginForm"><div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="loginEmail" required></div><div class="mb-3"><label class="form-label">Mật khẩu</label><input type="password" class="form-control" id="loginPassword" required minlength="6"></div><button type="submit" class="btn btn-primary w-100">Đăng nhập</button></form><form id="registerForm" class="d-none"><div class="mb-3"><label class="form-label">Tên hiển thị</label><input type="text" class="form-control" id="registerName" required></div><div class="mb-3"><label class="form-label">Email</label><input type="email" class="form-control" id="registerEmail" required></div><div class="mb-3"><label class="form-label">Mật khẩu</label><input type="password" class="form-control" id="registerPassword" required minlength="6"></div><button type="submit" class="btn btn-primary w-100">Đăng ký</button></form><div id="authError" class="alert alert-danger mt-3 d-none"></div></div></div></div></div>
+<div class="modal fade" id="createModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title" id="createModalTitle">Đăng bài viết mới</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="createForm"><input type="hidden" id="postType" value="discussion"><div class="mb-3"><label class="form-label">Tiêu đề</label><input type="text" class="form-control" id="postTitle" required maxlength="200"></div><div class="mb-3"><label class="form-label">Danh mục</label><select class="form-select" id="postCategory" required></select></div><div class="mb-3"><label class="form-label">Nội dung</label><textarea class="form-control" id="postContent" rows="8" required></textarea></div><button type="submit" class="btn btn-primary" id="createSubmitBtn">Đăng bài</button></form></div></div></div></div>
+<div class="modal fade" id="editPostModal" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content"><div class="modal-header border-0"><h5 class="modal-title">Chỉnh sửa bài viết</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><form id="editPostForm"><input type="hidden" id="editPostId"><div class="mb-3"><label class="form-label">Tiêu đề</label><input type="text" class="form-control" id="editPostTitle" required maxlength="200"></div><div class="mb-3"><label class="form-label">Danh mục</label><select class="form-select" id="editPostCategory" required></select></div><div class="mb-3"><label class="form-label">Nội dung</label><textarea class="form-control" id="editPostContent" rows="8" required></textarea></div><button type="submit" class="btn btn-primary" id="editPostSubmitBtn">Lưu thay đổi</button></form></div></div></div></div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3"><div id="toast" class="toast" role="alert"><div class="toast-body d-flex align-items-center gap-2"><span id="toastMsg"></span></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="js/profile.js"></script>
+</body>
+</html>

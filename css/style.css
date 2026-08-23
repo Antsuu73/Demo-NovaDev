@@ -1,0 +1,10 @@
+/**
+ * NovaDev CSS Bundle
+ * Modularized into clean separate CSS files:
+ * 1. base.css - Variables, resets, typography, navbar, footer, buttons, auth modal
+ * 2. components.css - Hero, headers, cards, grids, posts, comments, empty state
+ * 3. profile.css - User profile card, stats grid, edit form
+ */
+@import url('base.css');
+@import url('components.css');
+@import url('profile.css');
