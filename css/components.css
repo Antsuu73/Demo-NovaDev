@@ -5,6 +5,7 @@
     padding: 4rem 0 5rem;
     position: relative;
     overflow: hidden;
+    font-family: 'Inter', sans-serif;
 }
 
 .hero::before {
@@ -19,6 +20,8 @@
 }
 
 .hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
     font-size: clamp(2rem, 5vw, 3rem);
     line-height: 1.2;
     margin-bottom: 1rem;
