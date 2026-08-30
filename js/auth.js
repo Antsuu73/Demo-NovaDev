@@ -145,9 +145,21 @@ export function initAuth() {
         e.preventDefault();
         const errEl = $("authError");
         errEl?.classList.add("d-none");
+
+        const password = $("registerPassword").value;
+        const confirmPassword = $("registerConfirmPassword")?.value;
+
+        if (password !== confirmPassword) {
+            if (errEl) {
+                errEl.textContent = "Mật khẩu xác nhận không khớp";
+                errEl.classList.remove("d-none");
+            }
+            return;
+        }
+
         try {
             const cred = await createUserWithEmailAndPassword(
-                auth, $("registerEmail").value, $("registerPassword").value
+                auth, $("registerEmail").value, password
             );
             await updateProfile(cred.user, { displayName: $("registerName").value });
             await setDoc(doc(db, "users", cred.user.uid), {
