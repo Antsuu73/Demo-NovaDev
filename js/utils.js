@@ -29,6 +29,7 @@ export function formatDate(ts) {
 export function showToast(msg, icon = "✅") {
     const toastEl = $("toast");
     if (!toastEl) return;
+    if($("toastIcon"))
     $("toastIcon").textContent = icon;
     $("toastMsg").textContent = msg;
     bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 3000 }).show();
