@@ -1,4 +1,4 @@
-// admin-posts.js — Quản lý Bài viết (CRUD + Realtime Firestore)
+// admin-posts.js — Quản lý Bài viết (CRUD, Bộ lọc & Realtime Firestore)
 
 import {
     db, collection, addDoc, doc, updateDoc, deleteDoc,
@@ -6,13 +6,13 @@ import {
 } from "../js/firebase-config.js";
 import { CATEGORIES, getCategoryName, getTypeName } from "../js/data.js";
 import { $, showToast, formatDate, escapeHtml } from "./admin-utils.js";
+import { switchTab } from "./admin-navigation.js";
 
-// State dùng chung (được thiết lập từ admin.js)
 let allPosts = [];
-let currentUserRef = { value: null };
+let currentUser = null;
 
 /**
- * Trả về bản sao danh sách bài viết
+ * Trả về danh sách tất cả bài viết hiện có trong state
  * @returns {Array}
  */
 export function getAllPosts() {
@@ -20,30 +20,30 @@ export function getAllPosts() {
 }
 
 /**
- * Gán tham chiếu đến currentUser
- * @param {{ value: import("firebase/auth").User|null }} ref
+ * Thiết lập người dùng đăng nhập hiện tại
+ * @param {import("firebase/auth").User|null} user
  */
-export function setCurrentUserRef(ref) {
-    currentUserRef = ref;
+export function setCurrentUser(user) {
+    currentUser = user;
 }
 
 /**
- * Subscribe realtime Firestore và cập nhật bảng bài viết
- * @param {Function} onUpdate - Callback mỗi khi dữ liệu thay đổi (nhận allPosts)
+ * Đăng ký lắng nghe danh sách bài viết từ Firestore theo thời gian thực
+ * @param {Function} onUpdate - Callback khi dữ liệu thay đổi (nhận allPosts)
  */
 export function subscribePosts(onUpdate) {
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     onSnapshot(q, snap => {
         allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        onUpdate(allPosts);
+        onUpdate?.(allPosts);
     }, err => {
         console.error("Firestore posts error:", err);
-        showToast("Lỗi tải bài viết từ Firestore");
+        showToast("Lỗi tải bài viết từ Firestore: " + err.message);
     });
 }
 
 /**
- * Render bảng bài viết trong tab Quản lý Bài viết
+ * Hiển thị bảng bài viết trong tab Quản lý Bài viết (kèm lọc loại, danh mục, tìm kiếm)
  */
 export function renderPostsTable() {
     const tbody = $("adminPostsTable");
@@ -55,8 +55,12 @@ export function renderPostsTable() {
 
     let filtered = [...allPosts];
 
-    if (filterType !== "all") filtered = filtered.filter(p => (p.type || "discussion") === filterType);
-    if (filterCat !== "all") filtered = filtered.filter(p => p.category === filterCat);
+    if (filterType !== "all") {
+        filtered = filtered.filter(p => (p.type || "discussion") === filterType);
+    }
+    if (filterCat !== "all") {
+        filtered = filtered.filter(p => p.category === filterCat);
+    }
     if (search) {
         filtered = filtered.filter(p =>
             (p.title || "").toLowerCase().includes(search) ||
@@ -101,7 +105,7 @@ export function renderPostsTable() {
 }
 
 /**
- * Render bảng tổng quan bài viết mới nhất (5 bài)
+ * Hiển thị bảng bài viết mới nhất trong tab Tổng quan (5 bài)
  */
 export function renderOverviewPosts() {
     const tbody = $("overviewPostsTable");
@@ -127,8 +131,8 @@ export function renderOverviewPosts() {
 }
 
 /**
- * Mở modal Sửa bài viết và điền dữ liệu
- * @param {string} id
+ * Mở modal Sửa bài viết và nạp dữ liệu hiện tại
+ * @param {string} id - Document ID của bài viết
  */
 export function openEditModal(id) {
     const post = allPosts.find(p => p.id === id);
@@ -145,7 +149,7 @@ export function openEditModal(id) {
 }
 
 /**
- * Khởi tạo form Sửa bài viết (submit handler)
+ * Khởi tạo form Sửa bài viết (lắng nghe sự kiện submit)
  */
 export function initEditPostForm() {
     $("adminEditForm")?.addEventListener("submit", async e => {
@@ -172,22 +176,22 @@ export function initEditPostForm() {
 }
 
 /**
- * Xóa bài viết khỏi Firestore
- * @param {string} id
+ * Xóa một bài viết khỏi Firestore
+ * @param {string} id - Document ID của bài viết
  */
 export async function deletePost(id) {
-    if (!confirm("Bạn có chắc chắn muốn xóa bài viết này?")) return;
+    if (!confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) return;
     try {
         await deleteDoc(doc(db, "posts", id));
-        showToast("Đã xóa bài viết!");
+        showToast("Đã xóa bài viết thành công!");
     } catch (err) {
         console.error("Lỗi xóa bài viết:", err);
-        showToast("Không thể xóa bài viết");
+        showToast("Không thể xóa bài viết: " + err.message);
     }
 }
 
 /**
- * Khởi tạo form Đăng bài viết mới từ Admin
+ * Khởi tạo form Đăng bài viết mới trực tiếp từ Admin
  */
 export function initCreatePostForm() {
     $("adminCreatePostForm")?.addEventListener("submit", async e => {
@@ -199,9 +203,8 @@ export function initCreatePostForm() {
 
         if (!title || !content) return;
 
-        const user = currentUserRef.value;
-        const authorName = user?.displayName || user?.email?.split("@")[0] || "Admin NovaDev";
-        const authorId = user?.uid || "admin";
+        const authorName = currentUser?.displayName || currentUser?.email?.split("@")[0] || "Admin NovaDev";
+        const authorId = currentUser?.uid || "admin";
 
         try {
             await addDoc(collection(db, "posts"), {
@@ -220,10 +223,10 @@ export function initCreatePostForm() {
 
             $("adminPostTitle").value = "";
             $("adminPostContent").value = "";
-            showToast("Đã đăng bài viết thành công!");
+            showToast("Đã đăng bài viết mới thành công!");
 
-            const sidebar = $("adminSidebar");
-            sidebar.querySelector("[data-tab='posts']")?.click();
+            // Tự động chuyển về tab Quản lý Bài viết để xem bài vừa tạo
+            switchTab("posts");
         } catch (err) {
             console.error("Lỗi đăng bài mới:", err);
             showToast("Không thể đăng bài viết: " + err.message);
@@ -232,7 +235,7 @@ export function initCreatePostForm() {
 }
 
 /**
- * Khởi tạo event listeners bộ lọc bảng bài viết
+ * Khởi tạo các sự kiện lắng nghe bộ lọc của bảng bài viết
  */
 export function initPostFilters() {
     $("postSearchInput")?.addEventListener("input", renderPostsTable);
@@ -241,8 +244,8 @@ export function initPostFilters() {
 }
 
 /**
- * Điền các lựa chọn danh mục vào select
- * @param {string[]} selectIds - Mảng ID của các select element
+ * Đổ dữ liệu danh mục vào các thẻ select
+ * @param {string[]} selectIds - Mảng ID của các thẻ select cần nạp danh mục
  */
 export function initCategorySelects(selectIds) {
     selectIds.forEach(id => {
