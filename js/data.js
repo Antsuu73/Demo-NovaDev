@@ -19,9 +19,9 @@ export const SAMPLE_POSTS = [
         type: "discussion",
         authorName: "Admin",
         authorId: "system",
-        views: 128,
-        likes: 4,
-        commentCount: 2,
+        views: 0,
+        likes: 0,
+        commentCount: 0,
     }
 ];
 
