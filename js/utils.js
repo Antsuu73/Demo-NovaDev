@@ -15,7 +15,7 @@ export function avatarInitial(name) {
 export function userAvatarHtml(user, sizeClass = "user-avatar") {
     const name = user.displayName || user.email?.split("@")[0] || "?";
     if (user.photoURL) {
-        return `<img src="${escapeHtml(user.photoURL)}" class="${sizeClass} ${sizeClass}-img" alt="${escapeHtml(name)}">`;
+       return `<img src="${escapeHtml(user.photoURL)}" class="${sizeClass} ${sizeClass}-img" alt="${escapeHtml(name)}" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'${sizeClass}\\'>${avatarInitial(name)}</span>';">`;
     }
     return `<span class="${sizeClass}">${avatarInitial(name)}</span>`;
 }

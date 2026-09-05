@@ -70,7 +70,7 @@ function renderFeatured(posts) {
                     <span class="featured-category">${getCategoryIcon(post.category)} ${getCategoryName(post.category)}</span>
                 </div>
                 <h3 class="featured-card-title">${escapeHtml(post.title)}</h3>
-                <p class="featured-card-excerpt">${escapeHtml(post.content.substring(0, 100))}${post.content.length > 100 ? "..." : ""}</p>
+                <p class="featured-card-excerpt">${escapeHtml((post.content || "").substring(0, 100))}${(post.content || "").length > 100 ? "..." : ""}</p>
                 <div class="featured-card-footer">
                     <span class="featured-author">${avatarInitial(post.authorName)} ${escapeHtml(post.authorName)}</span>
                     <div class="featured-stats">

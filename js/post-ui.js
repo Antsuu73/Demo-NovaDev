@@ -31,7 +31,7 @@ export function renderListCard(post, type) {
                     <span class="post-time">${formatDate(post.createdAt)}</span>
                 </div>
                 <h3 class="list-card-title">${escapeHtml(post.title)}</h3>
-                <p class="list-card-excerpt">${escapeHtml(post.content.substring(0, 180))}${post.content.length > 180 ? "..." : ""}</p>
+                <p class="list-card-excerpt">${escapeHtml((post.content || "").substring(0, 180))}${post.content.length > 180 ? "..." : ""}</p>
                 <div class="post-stats">
                     <span>Lượt xem: ${post.views || 0}</span>
                     <button class="btn-like-inline ${liked ? "liked" : ""}" data-like-id="${post.id}">

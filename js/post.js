@@ -10,7 +10,9 @@ const fromPage = params.get("from") || "home";
 
 const BACK_URLS = { home: "index.html", qa: "qa.html", discussion: "discussion.html" };
 
-$("btnBack").href = BACK_URLS[fromPage] || "index.html";
+const btnBack = $("btnBack");
+if (btnBack) btnBack.href = BACK_URLS[fromPage] || "index.html";
+
 
 if (!postId) {
     showToast("Không tìm thấy bài viết", "❌");

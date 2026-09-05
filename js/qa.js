@@ -15,8 +15,8 @@ function render() {
     let posts = allPosts.filter(p => getPostType(p) === "qa");
     if (search) {
         posts = posts.filter(p =>
-            p.title.toLowerCase().includes(search) ||
-            p.content.toLowerCase().includes(search)
+            (p.title || "").toLowerCase().includes(search) ||
+            (p.content || "").toLowerCase().includes(search)
         );
     }
     posts = sortPosts(posts, sort);
