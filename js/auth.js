@@ -52,7 +52,7 @@ const ADMIN_EMAILS = [
 export function isAdminUser(user) {
     if (!user) return false;
     const email = (user.email || "").toLowerCase();
-    return ADMIN_EMAILS.includes(email) || email.includes("admin");
+    return ADMIN_EMAILS.includes(email);
 }
 
 function renderAuthArea() {
